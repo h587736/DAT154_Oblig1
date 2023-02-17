@@ -27,8 +27,11 @@ static HBRUSH hGreenBrush = CreateSolidBrush(RGB(50, 205, 50));
 static HBRUSH hGreyBrush = CreateSolidBrush(RGB(128, 128, 128));
 void TegnSannsynlighet(HDC, double, double);
 
+void drawCars(HDC);
+void drawRoad(HDC);
+bool checkAvailable(Car);
 using namespace		std;
-vector<Car> cars;
+static vector<Car> cars;
 int	carNr = 0;
 static int lightState = 0;
 static map <int, pair < int, int>> available;
@@ -153,7 +156,7 @@ void drawRoad(HDC hdc) {
 }
 
 void drawCars(HDC hdc) {
-    HBRUSH hBrush = CreateSolidBrush(RGB(255, 69, 0));
+    HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
     HGDIOBJ	hOrg = SelectObject(hdc, hBrush);
 
     for (Car& c : cars) {
@@ -294,6 +297,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         HGDIOBJ hOrg;
 
         drawRoad(hdc);
+        drawCars(hdc);
 
         // Part 1
         switch (lightState) {
