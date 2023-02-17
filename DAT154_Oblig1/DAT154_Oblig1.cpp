@@ -187,15 +187,15 @@ void makeCar(int direction) {
     Car car = Car(carNr);
     if (direction == 0) {
         car.setLeft(0);
-        car.setTop(210);
+        car.setTop(250);
         car.setRight(40);
         car.setBottom(240);
         car.setDirection(0);
     }
-    if (dir == 1) {
-        car.setLeft(460);
+    if (direction == 1) {
+        car.setLeft(575);
         car.setTop(0);
-        car.setRight(490);
+        car.setRight(585);
         car.setBottom(40);
         car.setDirection(1);
     }
@@ -410,6 +410,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         InvalidateRect(hWnd, NULL, TRUE); // Redraw the window to reflect the new state
          */
         // Part 4
+        makeCar(0);
+        break;
+
+    case WM_RBUTTONDOWN:
         makeCar(1);
         break;
 
