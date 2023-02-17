@@ -165,6 +165,7 @@ bool checkAvailable(Car c1) { //Sjekker om det er ledig plass til ny bil
 			if ((c1.getLeft() + 50) == testPos.second.second) {
 				return false;
 			}
+
 		}
 		else {
 			if (c1.getBottom() + 50 == testPos.second.second) {
@@ -197,19 +198,19 @@ void makeCar(int direction) { // Funksjon som legger en bil inn i Car vectoren e
 
 void updateCars() { // Funksjon som oppdaterer posisjonen til bilene
 	for (Car& c : cars) {
-		if (checkAvailable(c)) {
+		if (checkAvailable(c)==true) {
 			if (c.getDirection() == 0) {
 				pair<int, int> par = pair<int, int>(c.getRight(), c.getBottom());
 				available.insert(pair<int, pair<int, int>>(c.getNr(), par));
 
-				if (!(c.getRight() == 440) || lightState == 2 || lightState == 3) {
+				if (!(c.getRight() == 590) || lightState == 2 || lightState == 3) {
 
 					c.setLeft(c.getLeft() + 10);
 					c.setRight(c.getRight() + 10);
 				}
 			}
 			if (c.getDirection() == 1) {
-				if (!(c.getBottom() == 190) || lightState == 1 || lightState == 0) {
+				if (!(c.getBottom() == 300) || lightState == 1 || lightState == 0) {
 					c.setTop(c.getTop() + 10);
 					c.setBottom(c.getBottom() + 10);
 				}
