@@ -36,8 +36,8 @@ int	carNr = 0;
 static int lightState = 0;
 static map <int, pair < int, int>> available;
 
-static double		sannsynligVest = 0.20;
-static double		sannsynligNord = 0.20;
+static double		sannsynligVest = 0.10;
+static double		sannsynligNord = 0.10;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -183,36 +183,24 @@ bool checkAvailable(Car c1) {
     return true;
 }
 
-void makeCar(int direction)
-{
-    int top, left, right, bottom;
-    if (direction == 1) { //North
-        top = SCREEN_HEIGHT;
-        left = CAR_NORTH_START;
-        right = left + CAR_WIDTH;
-        bottom = top + CAR_HEIGHT;
+void makeCar(int direction) {
+    Car car = Car(carNr);
+    if (direction == 0) {
+        car.setLeft(0);
+        car.setTop(210);
+        car.setRight(40);
+        car.setBottom(240);
+        car.setDirection(0);
     }
-    else { //West
-        left = SCREEN_WIDTH;
-        top = CAR_WEST_START;
-        bottom = top + CAR_WIDTH;
-        right = left + CAR_HEIGHT;
+    if (dir == 1) {
+        car.setLeft(460);
+        car.setTop(0);
+        car.setRight(490);
+        car.setBottom(40);
+        car.setDirection(1);
     }
-
-    // Create a new car and set its properties
-    Car* newCar = new Car(carList.size());
-    newCar->setTop(top);
-    newCar->setLeft(left);
-    newCar->setRight(right);
-    newCar->setBottom(bottom);
-    newCar->setDirection(direction);
-
-    // Add the new car to the list
-    carList.push_back(newCar);
-}
-
-    // Add new car to the list
-    cars.push_back(newCar);
+    cars.push_back(car);
+    carNr++;
 }
 
 void updateCars() {
