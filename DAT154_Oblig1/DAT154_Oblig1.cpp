@@ -36,8 +36,8 @@ int	carNr = 0;
 static int lightState = 0;
 static map <int, pair < int, int>> available;
 
-static double		sannsynligVest = 0.10;
-static double		sannsynligNord = 0.10;
+static double sannsynligVest = 0.10;
+static double sannsynligNord = 0.10;
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     _In_opt_ HINSTANCE hPrevInstance,
@@ -136,8 +136,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 void TegnSannsynlighet(HDC hdc, double nord, double vest) {
-	
-	
+
 	TCHAR text[256];
 	swprintf_s(text, 256, L"Sannsynlighet Vest: %lf", vest);
 	TextOut(hdc, 10, 70, text, wcslen(text));
@@ -146,28 +145,23 @@ void TegnSannsynlighet(HDC hdc, double nord, double vest) {
 
 }
 
-void drawRoad(HDC hdc) {
-    HBRUSH hBrush = CreateSolidBrush(RGB(128, 128, 128));;
-    HGDIOBJ	hOrg = SelectObject(hdc, hBrush);
+void drawRoad(HDC hdc) { // Tegner veien
+    HGDIOBJ	hOrg = SelectObject(hdc, hGrayBrush);
     Rectangle(hdc, 0, 300, 1500, 400);
     Rectangle(hdc, 600, 0, 700, 700);
-    DeleteObject(hBrush);
     DeleteObject(hOrg);
 }
 
-void drawCars(HDC hdc) {
-    HBRUSH hBrush = CreateSolidBrush(RGB(0, 0, 0));
-    HGDIOBJ	hOrg = SelectObject(hdc, hBrush);
-
+void drawCars(HDC hdc) { // Tegner alle bilene i vektoren
+    HGDIOBJ	hOrg = SelectObject(hdc, hBlackBrush);
     for (Car& c : cars) {
         Rectangle(hdc, c.getLeft(), c.getTop(), c.getRight(), c.getBottom());
     }
 
-    DeleteObject(hBrush);
     DeleteObject(hOrg);
 }
 
-bool checkAvailable(Car c1) {
+bool checkAvailable(Car c1) { //Sjekker om det er ledig plass til ny bil 
     for (auto &testPos : available) {
         if (c1.getDirection() == 0) {
             if ((c1.getLeft() + 40) == testPos.second.second) {
@@ -183,7 +177,7 @@ bool checkAvailable(Car c1) {
     return true;
 }
 
-void makeCar(int direction) {
+void makeCar(int direction) { // Funksjon som legger en bil inn i Car vectoren enten fra retning nord eller vest
     Car car = Car(carNr);
     if (direction == 0) {
         car.setLeft(0);
@@ -203,7 +197,7 @@ void makeCar(int direction) {
     carNr++;
 }
 
-void updateCars() {
+void updateCars() { // Funksjon som oppdaterer posisjonen til bilene
     for (Car& c : cars) {
         if (checkAvailable(c)) {
             if (c.getDirection() == 0) {
@@ -276,16 +270,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     break;
     case WM_CREATE:
-        // Part 3
-        SetTimer(hWnd,             // handle to main window
-            1,            // timer identifier
-            10000,                 // 10-second interval
-            (TIMERPROC)NULL);     // no timer callback
+        SetTimer(hWnd,             
+            1,            // timer id
+            10000,        // 10 sekunds intervall
+            (TIMERPROC)NULL);     
 
-        SetTimer(hWnd,             // handle to main window
-            2,            // timer identifier
-            1000,                 // 1-second interval
-            (TIMERPROC)NULL);     // no timer callback
+        SetTimer(hWnd,            
+            2,            // timer id
+            1000,        // 1 sekunds intervall
+            (TIMERPROC)NULL);     
 
         break;
     case WM_PAINT:
@@ -295,14 +288,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         HBRUSH hBrush;
         HGDIOBJ hOrg;
-
-        drawRoad(hdc);
-        drawCars(hdc);
+        
+        drawRoad(hdc); // Tegner veien
+        drawCars(hdc); // Tegner bilene
 
         // Part 1
-        switch (lightState) {
+        switch (lightState) { // Switch som bestemmer fargen på trafikklysene
         case 0:
-            // Part 1
+            // Lys 1
             SelectObject(hdc, hBlackBrush);
             Rectangle(hdc, 100, 0, 200, 299);
           
@@ -313,7 +306,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             Ellipse(hdc, 105, 100, 195, 200);
             Ellipse(hdc, 105, 199, 195, 299);
 
-        // Part 2
+        // Lys 2
             SelectObject(hdc, hBlackBrush);
             Rectangle(hdc, 710, 0, 810, 299);
 
@@ -325,7 +318,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             Ellipse(hdc, 715, 0, 805, 100);
             break;
         case 1:
-            // Part 1
+            // Lys 1
             SelectObject(hdc, hBlackBrush);
             Rectangle(hdc, 100, 0, 200, 299);
 
@@ -338,7 +331,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             SelectObject(hdc, hGreyBrush);
             Ellipse(hdc, 105, 199, 195, 299);
 
-            // Part 2
+           // Lys 2
             SelectObject(hdc, hBlackBrush);
             Rectangle(hdc, 710, 0, 810, 299);
 
@@ -350,7 +343,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             Ellipse(hdc, 715, 199, 805, 299);
             break;
         case 2:
-            // Part 1
+            // Lys 1
             SelectObject(hdc, hBlackBrush);
             Rectangle(hdc, 100, 0, 200, 299);
 
@@ -361,7 +354,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             Ellipse(hdc, 105, 0, 195, 100);
             Ellipse(hdc, 105, 100, 195, 200);
 
-            // Part 2
+            // Lys 2
             SelectObject(hdc, hBlackBrush);
             Rectangle(hdc, 710, 0, 810, 299);
 
@@ -373,7 +366,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             Ellipse(hdc, 715, 199, 805, 299);
             break;
         case 3:
-            // Part 1
+            // Lys 1
             SelectObject(hdc, hBlackBrush);
             Rectangle(hdc, 100, 0, 200, 299);
 
@@ -384,7 +377,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             Ellipse(hdc, 105, 0, 195, 100);
             Ellipse(hdc, 105, 199, 195, 299);
 
-            //Part 2
+            //Lys 2
             SelectObject(hdc, hBlackBrush);
             Rectangle(hdc, 710, 0, 810, 299);
 
@@ -409,32 +402,31 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         lightState = (lightState + 1) % 4; // Cycle through the states 0-1-2-3-0...
         InvalidateRect(hWnd, NULL, TRUE); // Redraw the window to reflect the new state
          */
-        // Part 4
-        makeCar(0);
+        makeCar(0); // Skal lage en bil fra vest
         break;
 
     case WM_RBUTTONDOWN:
-        makeCar(1);
+        makeCar(1); // Skal lage en bil fra nord
         break;
 
         //Part 3 WM_TIMER case which uses previous on mouse click logic
     case WM_TIMER:
-        double val, val1;
+        double val, val1; //Lager 2 verdier
         switch (wParam)
         {
         case 1:
             // Part 1
-            lightState = (lightState + 1) % 4; // Cycle through the states 0-1-2-3-0...
-            InvalidateRect(hWnd, NULL, false); // Redraw the window to reflect the new state
+            lightState = (lightState + 1) % 4; // Går gjennom de 4 forsjellige lys "statene" hver gang timer 1 "proccer"
+            InvalidateRect(hWnd, NULL, false); // Tegner vidunet på nytt
             break;
         case 2:
-            updateCars();
-            val = (double)rand() / RAND_MAX;
-            if (val < sannsynligNord) {
+            updateCars(); // Oppdaterer posisjonen til bilene
+            val = (double)rand() / RAND_MAX; //gir val en tilfeldig verdi mellom 0 og 1
+            if (val < sannsynligNord) { // Dersom verdien er mindre enn sannsynet for bil fra nord blir det laget en bil fra nord
                 makeCar(1);
             }
             val1 = (double)rand() / RAND_MAX;
-            if (val1 < sannsynligVest) {
+            if (val1 < sannsynligVest) { // samme som val men med vest
                 makeCar(0);
             }
             InvalidateRect(hWnd, NULL, false);
@@ -442,7 +434,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         default: break;
         }
         break;
-    case WM_DESTROY:
+    case WM_DESTROY: 
+        // Rydder opp i noen brushes
         DeleteObject(hBlackBrush);
         DeleteObject(hGreyBrush);
         DeleteObject(hRedBrush);
